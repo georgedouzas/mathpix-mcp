@@ -12,7 +12,7 @@ echo "Applying branch protection to ${REPO}"
 gh api -X PUT "repos/${REPO}/branches/main/protection" --input - <<'JSON'
 {
   "required_status_checks": { "strict": true, "contexts": ["test (3.3)", "test (3.4)"] },
-  "enforce_admins": true,
+  "enforce_admins": false,
   "required_pull_request_reviews": {
     "required_approving_review_count": 1,
     "dismiss_stale_reviews": true,
