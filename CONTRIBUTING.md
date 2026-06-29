@@ -37,16 +37,34 @@ git tag vX.Y.Z && git push origin main --tags
 
 ## Branch protection
 
-Branch protection is a GitHub-side setting. After the repo exists on GitHub and
-`gh` is authenticated, apply it once with:
+Applied on GitHub (a one-shot setup, already done):
+
+- **`main`** — PR required with 1 approving review + CODEOWNERS review; CI checks
+  `test (3.3)` / `test (3.4)` must pass; strict (up-to-date) + linear history;
+  no force-pushes/deletions; conversation resolution required. `enforce_admins`
+  is off so the sole maintainer can still merge.
+- **`dev`** — CI checks required; direct pushes allowed for integration work.
+
+To re-apply (needs `gh` authenticated):
 
 ```bash
-scripts/setup-branch-protection.sh            # auto-detects owner/repo
-# or
-scripts/setup-branch-protection.sh owner/repo
-```
+gh api -X PUT repos/OWNER/REPO/branches/main/protection --input - <<'JSON'
+{
+  "required_status_checks": { "strict": true, "contexts": ["test (3.3)", "test (3.4)"] },
+  "enforce_admins": false,
+  "required_pull_request_reviews": { "required_approving_review_count": 1,
+    "dismiss_stale_reviews": true, "require_code_owner_reviews": true },
+  "restrictions": null, "required_linear_history": true,
+  "allow_force_pushes": false, "allow_deletions": false,
+  "required_conversation_resolution": true
+}
+JSON
 
-This requires:
-- CODEOWNERS review on `main`,
-- CI status checks (`test (3.3)`, `test (3.4)`) to pass,
-- linear history, no force-pushes/deletions, conversation resolution.
+gh api -X PUT repos/OWNER/REPO/branches/dev/protection --input - <<'JSON'
+{
+  "required_status_checks": { "strict": true, "contexts": ["test (3.3)", "test (3.4)"] },
+  "enforce_admins": false, "required_pull_request_reviews": null,
+  "restrictions": null, "allow_force_pushes": false, "allow_deletions": false
+}
+JSON
+```
