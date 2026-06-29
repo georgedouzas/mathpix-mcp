@@ -45,7 +45,7 @@ module Mathpix
             },
             max_inline_chars: {
               type: 'number',
-              description: "Maximum characters to return inline before auto-saving to a file to " \
+              description: 'Maximum characters to return inline before auto-saving to a file to ' \
                            "avoid exceeding the model context (default: #{DEFAULT_MAX_INLINE_CHARS}). " \
                            'Ignored when output_path is set.'
             },

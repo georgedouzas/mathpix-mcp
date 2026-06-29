@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
     convert images and PDF/DOCX/PPTX documents to LaTeX and Markdown, with
     descriptive errors and optional file output for large results.
   DESC
-  s.licenses    = ['MIT']
+  s.licenses = ['MIT']
 
   s.required_ruby_version = '>= 3.2.0'
 
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   # Runtime dependencies — minimal stdio MCP server.
   # base64 is no longer a default gem on Ruby 3.4+, so it must be declared.
   s.add_dependency 'base64', '>= 0.1'
-  s.add_dependency 'mcp', '~> 0.1.0'
+  s.add_dependency 'mcp', '>= 0.9.2'
 
   s.metadata['rubygems_mfa_required'] = 'true'
 end

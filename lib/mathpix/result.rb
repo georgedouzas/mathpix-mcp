@@ -294,8 +294,8 @@ module Mathpix
 
     # Convert to JSON
     # @return [String]
-    def to_json(*args)
-      data.to_json(*args)
+    def to_json(*)
+      data.to_json(*)
     end
 
     # Inspect
