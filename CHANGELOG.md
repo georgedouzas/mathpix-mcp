@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`MATHPIX_MCP_TOKEN`); binds to `127.0.0.1` by default.
 - Dev tooling: RuboCop (+ rake/rspec plugins), RSpec suite, Rakefile default
   task, and GitHub Actions CI (rubocop + rspec + bundler-audit).
+- Docs: `docs/CLIENTS.md` (Claude Code/Desktop, Codex, Cursor, generic) and
+  `docs/DEPLOYMENT.md` (TLS proxy, systemd, Docker); `Dockerfile` + `.dockerignore`.
+- CD: `.github/workflows/release.yml` (build/publish gem + push Docker image to
+  GHCR on `v*` tags); Dependabot; CODEOWNERS; PR template; `CONTRIBUTING.md`;
+  `scripts/setup-branch-protection.sh`.
 
 ### Changed
 - Upgraded `mcp` to a patched release (fixes CVE-2026-33946, SSE session

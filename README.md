@@ -77,21 +77,28 @@ curl -s http://127.0.0.1:3000/ \
 
 Don't expose it on a public interface without a TLS-terminating reverse proxy.
 
-## Register as an MCP server (Claude Code)
+## Connect an agent
 
-Using a gem install (executable on PATH):
+Per-client setup (Claude Code, Claude Desktop, Codex, Cursor, and any other MCP
+client) for both stdio and HTTP is in **[docs/CLIENTS.md](docs/CLIENTS.md)**.
+
+Quickest path — Claude Code over stdio:
 
 ```bash
-claude mcp add mathpix \
-  -e MATHPIX_APP_ID=... -e MATHPIX_APP_KEY=... \
-  -- mathpix-mcp
+claude mcp add mathpix -e MATHPIX_APP_ID=... -e MATHPIX_APP_KEY=... -- mathpix-mcp
 ```
 
-From a clone, keeping secrets in the project `.env`:
+## Deploy (HTTP)
+
+Production deployment — TLS reverse proxy (Caddy/nginx), systemd, Docker /
+docker-compose, and the security checklist — is in
+**[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**. A `Dockerfile` is included:
 
 ```bash
-claude mcp add mathpix -- \
-  bash -lc 'cd /Users/gdouzas/Projects/Personal/mathpix-mcp && exec bundle exec mathpix-mcp'
+docker build -t mathpix-mcp .
+docker run --rm -p 3000:3000 \
+  -e MATHPIX_APP_ID=... -e MATHPIX_APP_KEY=... \
+  -e MATHPIX_MCP_TOKEN=$(openssl rand -hex 32) mathpix-mcp
 ```
 
 ## Notes
