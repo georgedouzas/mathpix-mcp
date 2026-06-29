@@ -148,13 +148,193 @@ Edit `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project).
 
 ---
 
-## Any other MCP client (stdio-only) → HTTP
+## Gemini CLI
 
-Use the `mcp-remote` bridge to connect a stdio-only client to the HTTP server:
+Edit `~/.gemini/settings.json`.
+
+**stdio:**
+
+```json
+{
+  "mcpServers": {
+    "mathpix": {
+      "command": "mathpix-mcp",
+      "env": { "MATHPIX_APP_ID": "your_app_id", "MATHPIX_APP_KEY": "your_app_key" }
+    }
+  }
+}
+```
+
+**HTTP** (Gemini CLI uses `httpUrl` for Streamable HTTP; `url` for SSE):
+
+```json
+{
+  "mcpServers": {
+    "mathpix": {
+      "httpUrl": "http://127.0.0.1:3000/",
+      "headers": { "Authorization": "Bearer YOUR_TOKEN" }
+    }
+  }
+}
+```
+
+---
+
+## VS Code (GitHub Copilot, agent mode)
+
+Create `.vscode/mcp.json` in the workspace (note the top-level key is `servers`):
+
+**stdio:**
+
+```json
+{
+  "servers": {
+    "mathpix": {
+      "type": "stdio",
+      "command": "mathpix-mcp",
+      "env": { "MATHPIX_APP_ID": "your_app_id", "MATHPIX_APP_KEY": "your_app_key" }
+    }
+  }
+}
+```
+
+**HTTP:**
+
+```json
+{
+  "servers": {
+    "mathpix": {
+      "type": "http",
+      "url": "http://127.0.0.1:3000/",
+      "headers": { "Authorization": "Bearer YOUR_TOKEN" }
+    }
+  }
+}
+```
+
+---
+
+## Windsurf
+
+Edit `~/.codeium/windsurf/mcp_config.json`.
+
+**stdio:**
+
+```json
+{
+  "mcpServers": {
+    "mathpix": {
+      "command": "mathpix-mcp",
+      "env": { "MATHPIX_APP_ID": "your_app_id", "MATHPIX_APP_KEY": "your_app_key" }
+    }
+  }
+}
+```
+
+**HTTP** (Windsurf uses `serverUrl`):
+
+```json
+{ "mcpServers": { "mathpix": { "serverUrl": "http://127.0.0.1:3000/" } } }
+```
+
+If your Windsurf version can't attach the bearer header to a remote server, use
+the `mcp-remote` bridge (see below) as the `command`.
+
+---
+
+## Zed
+
+Edit `settings.json` (`Cmd/Ctrl+,`) under `context_servers`:
+
+```json
+{
+  "context_servers": {
+    "mathpix": {
+      "command": {
+        "path": "mathpix-mcp",
+        "args": [],
+        "env": { "MATHPIX_APP_ID": "your_app_id", "MATHPIX_APP_KEY": "your_app_key" }
+      }
+    }
+  }
+}
+```
+
+---
+
+## Continue (continue.dev)
+
+Add to `~/.continue/config.yaml`:
+
+```yaml
+mcpServers:
+  - name: Mathpix
+    command: mathpix-mcp
+    env:
+      MATHPIX_APP_ID: your_app_id
+      MATHPIX_APP_KEY: your_app_key
+```
+
+---
+
+## Cline (VS Code extension)
+
+Open the MCP Servers panel → "Configure MCP Servers" (writes
+`cline_mcp_settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "mathpix": {
+      "command": "mathpix-mcp",
+      "env": { "MATHPIX_APP_ID": "your_app_id", "MATHPIX_APP_KEY": "your_app_key" }
+    }
+  }
+}
+```
+
+---
+
+## Goose (Block)
+
+Add to `~/.config/goose/config.yaml`:
+
+```yaml
+extensions:
+  mathpix:
+    enabled: true
+    type: stdio
+    cmd: mathpix-mcp
+    args: []
+    envs:
+      MATHPIX_APP_ID: your_app_id
+      MATHPIX_APP_KEY: your_app_key
+```
+
+---
+
+## Programmatic (agent SDKs)
+
+For HTTP, point any MCP-capable SDK at `http://<host>:3000/` with an
+`Authorization: Bearer <token>` header — e.g. the Anthropic Claude Agent SDK MCP
+connector, the OpenAI Agents SDK (`MCPServerStreamableHttp`), or LangChain's MCP
+adapters. For stdio, spawn `mathpix-mcp` with `MATHPIX_APP_ID` / `MATHPIX_APP_KEY`
+in its environment.
+
+---
+
+## Any other MCP client
+
+Most clients use one of two shapes:
+
+- **stdio** — `command` + `args` + `env` (as in the Cursor/Windsurf/Cline blocks).
+- **HTTP** — a URL field (`url` / `httpUrl` / `serverUrl`, name varies) plus
+  `headers` for the bearer token.
+
+If a stdio-only client can't reach the HTTP server, bridge with
+[`mcp-remote`](https://www.npmjs.com/package/mcp-remote) — usable as the
+`command` in any stdio config above:
 
 ```bash
 npx -y mcp-remote http://127.0.0.1:3000/ --header "Authorization: Bearer YOUR_TOKEN"
 ```
-
-VS Code (GitHub Copilot), Windsurf, Zed and others accept the same
-`command`/`args`/`env` (stdio) or `url`/`headers` (HTTP) shapes shown above.

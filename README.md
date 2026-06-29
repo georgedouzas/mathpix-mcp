@@ -79,8 +79,10 @@ Don't expose it on a public interface without a TLS-terminating reverse proxy.
 
 ## Connect an agent
 
-Per-client setup (Claude Code, Claude Desktop, Codex, Cursor, and any other MCP
-client) for both stdio and HTTP is in **[docs/CLIENTS.md](docs/CLIENTS.md)**.
+Per-client setup for both stdio and HTTP is in
+**[docs/CLIENTS.md](docs/CLIENTS.md)** — covering Claude Code, Claude Desktop,
+Codex, Cursor, Gemini CLI, VS Code (Copilot), Windsurf, Zed, Continue, Cline,
+Goose, agent SDKs, and a generic `mcp-remote` bridge for anything else.
 
 Quickest path — Claude Code over stdio:
 
