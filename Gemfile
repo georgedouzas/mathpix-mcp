@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 # Optional: load MATHPIX_* from a local .env when present (bin/mathpix-mcp uses it).
-gem 'dotenv', '~> 2.8', require: false
+gem 'dotenv', '~> 3.2', require: false
 
 group :development, :test do
   gem 'bundler-audit', '~> 0.9', require: false
