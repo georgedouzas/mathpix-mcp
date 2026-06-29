@@ -26,6 +26,24 @@ bundle exec bundle-audit check   # dependency CVEs
   gem (publishes to RubyGems if `RUBYGEMS_API_KEY` is set) and builds/pushes a
   Docker image to GHCR.
 
+### Publishing to RubyGems (one-time setup)
+
+Publishing uses **RubyGems Trusted Publishing** (OIDC) — no API key/secret is
+stored. Configure it once on rubygems.org before the first release:
+
+1. Sign in at <https://rubygems.org>.
+2. Open **Trusted Publishers → Register a new pending publisher**
+   (<https://rubygems.org/profile/oidc/pending_trusted_publishers/new>) — the
+   "pending" form is for gems that don't exist on RubyGems yet.
+3. Fill in:
+   - RubyGems gem name: `mathpix-mcp`
+   - Repository owner: `georgedouzas`
+   - Repository name: `mathpix-mcp`
+   - Workflow filename: `release.yml`
+   - Environment: *(leave blank)*
+4. Save. The first `v*` tag push then publishes the gem (creating it), and
+   subsequent tags publish new versions.
+
 ### Cutting a release
 
 ```bash
@@ -34,6 +52,9 @@ git checkout main && git merge --no-ff dev
 git commit -am "Release vX.Y.Z"
 git tag vX.Y.Z && git push origin main --tags
 ```
+
+The `release.yml` workflow then publishes the gem to RubyGems (trusted
+publishing) and pushes a Docker image to GHCR.
 
 ## Branch protection
 

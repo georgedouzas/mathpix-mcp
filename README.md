@@ -25,14 +25,26 @@ documents into LaTeX and Markdown.
 
 ## Install
 
-As a gem:
+From RubyGems (provides the `mathpix-mcp` / `mathpix-mcp-http` executables):
+
+```bash
+gem install mathpix-mcp
+```
+
+Or straight from GitHub (in a Gemfile):
+
+```ruby
+gem 'mathpix-mcp', git: 'https://github.com/georgedouzas/mathpix-mcp'
+```
+
+Or build locally from a clone:
 
 ```bash
 gem build mathpix-mcp.gemspec
-gem install ./mathpix-mcp-*.gem      # provides the `mathpix-mcp` executable
+gem install ./mathpix-mcp-*.gem
 ```
 
-Or from a clone, with Bundler:
+Or run from a clone with Bundler:
 
 ```bash
 bundle install

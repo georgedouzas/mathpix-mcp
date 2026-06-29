@@ -4,16 +4,13 @@ on:
   push:
     tags: ['v*']
 
-permissions:
-  contents: read
-  packages: write
-
 jobs:
   gem:
-    name: Build & publish gem
+    name: Publish gem (RubyGems Trusted Publishing)
     runs-on: ubuntu-latest
-    env:
-      RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+    permissions:
+      contents: write   # create the GitHub release
+      id-token: write   # OIDC token for RubyGems trusted publishing
     steps:
       - uses: actions/checkout@v4
 
@@ -22,24 +19,16 @@ jobs:
           ruby-version: '3.4'
           bundler-cache: true
 
-      - name: Build gem
-        run: gem build mathpix-mcp.gemspec
-
-      - name: Publish to RubyGems
-        if: ${{ env.RUBYGEMS_API_KEY != '' }}
-        env:
-          GEM_HOST_API_KEY: ${{ env.RUBYGEMS_API_KEY }}
-        run: gem push mathpix-mcp-*.gem
-
-      - name: Upload gem artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: gem
-          path: mathpix-mcp-*.gem
+      # Builds the gem and pushes it to RubyGems via trusted publishing (OIDC).
+      # No API key/secret required — see CONTRIBUTING.md for the one-time setup.
+      - uses: rubygems/release-gem@v1
 
   docker:
     name: Build & push image (GHCR)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
