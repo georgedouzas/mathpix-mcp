@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mcp', '>= 0.9.2'
   # HTTP (Streamable HTTP) transport. rack is autoloaded by the SDK transport;
   # puma serves it via bin/mathpix-mcp-http. (stdio mode loads neither.)
-  s.add_dependency 'puma', '~> 6.0'
+  s.add_dependency 'puma', '>= 6', '< 9'
   s.add_dependency 'rack', '~> 3.1'
 
   s.metadata['rubygems_mfa_required'] = 'true'
