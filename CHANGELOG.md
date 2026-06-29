@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Upgraded `mcp` to a patched release (fixes CVE-2026-33946, SSE session
   binding) and updated the stdio transport require/path accordingly.
+- Require `puma >= 8.0.2` (fixes CVE-2026-47736 / -47737, PROXY-protocol DoS).
 
 ## [0.1.0] - 2026-06-29
 
