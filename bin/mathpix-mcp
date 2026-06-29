@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+
+# Load environment variables from a .env file if one is present (no-op if the
+# dotenv gem or file is missing). Done before configuring Mathpix so MATHPIX_*
+# from .env are available.
+begin
+  require 'dotenv/load'
+rescue LoadError
+  # dotenv not installed — rely on the process environment
+end
+
+require 'mathpix'
+require 'mathpix/mcp'
+
+# Configure Mathpix from environment
+Mathpix.configure do |config|
+  config.app_id = ENV.fetch('MATHPIX_APP_ID', nil)
+  config.app_key = ENV.fetch('MATHPIX_APP_KEY', nil)
+
+  # Optional configuration
+  config.max_file_size_mb = ENV['MATHPIX_MAX_FILE_SIZE_MB']&.to_i || 10
+  config.enforce_https = ENV['MATHPIX_HTTPS_ONLY'] != 'false'
+
+  # Logging
+  if ENV['MATHPIX_LOG_LEVEL']
+    require 'logger'
+    config.logger = Logger.new($stderr)
+    config.logger.level = Logger.const_get(ENV['MATHPIX_LOG_LEVEL'].upcase)
+  end
+end
+
+# Start MCP server on stdio.
+#
+# The Server constructor wires up all 9 tools internally
+# (see Mathpix::MCP::Server#tool_classes), so we just
+# build it and run the stdio transport.
+begin
+  Mathpix::MCP::Server.run
+rescue StandardError => e
+  warn "Error starting Mathpix MCP server: #{e.message}"
+  warn e.backtrace.join("\n")
+  exit 1
+end
