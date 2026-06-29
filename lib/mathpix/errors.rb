@@ -28,8 +28,8 @@ module Mathpix
   class RateLimitError < APIError
     attr_reader :retry_after
 
-    def initialize(message, retry_after: nil, **options)
-      super(message, **options)
+    def initialize(message, retry_after: nil, **)
+      super(message, **)
       @retry_after = retry_after
     end
   end

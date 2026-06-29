@@ -2,7 +2,7 @@
 
 begin
   require 'mcp'
-  require 'mcp/transports/stdio' # Transport classes not auto-loaded
+  require 'mcp/server/transports/stdio_transport' # transport not auto-loaded
 rescue LoadError
   raise LoadError, <<~ERROR
     The 'mcp' gem is required for MCP server functionality.
@@ -59,9 +59,9 @@ module Mathpix
 
       # Create STDIO transport (standard MCP transport)
       #
-      # @return [::MCP::Transports::StdioTransport]
+      # @return [::MCP::Server::Transports::StdioTransport]
       def create_stdio_transport
-        ::MCP::Transports::StdioTransport.new(@mcp_server)
+        ::MCP::Server::Transports::StdioTransport.new(@mcp_server)
       end
 
       # Run MCP server with STDIO transport (blocking)
@@ -85,8 +85,8 @@ module Mathpix
       #
       # @example
       #   Mathpix::MCP::Server.run
-      def self.run(**options)
-        new(**options).run
+      def self.run(**)
+        new(**).run
       end
 
       private
