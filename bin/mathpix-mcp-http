@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+
+# Load environment (incl. MATHPIX_* and MATHPIX_MCP_TOKEN) from .env if present.
+begin
+  require 'dotenv/load'
+rescue LoadError
+  # dotenv not installed — rely on the process environment
+end
+
+require 'mathpix'
+require 'mathpix/mcp'
+require 'mathpix/mcp/http_app'
+
+Mathpix.configure do |config|
+  config.app_id = ENV.fetch('MATHPIX_APP_ID', nil)
+  config.app_key = ENV.fetch('MATHPIX_APP_KEY', nil)
+  config.max_file_size_mb = ENV['MATHPIX_MAX_FILE_SIZE_MB']&.to_i || 10
+  config.enforce_https = ENV['MATHPIX_HTTPS_ONLY'] != 'false'
+end
+
+app  = Mathpix::MCP::HttpApp.build
+host = ENV.fetch('MATHPIX_MCP_HOST', '127.0.0.1')
+port = Integer(ENV.fetch('MATHPIX_MCP_PORT', '3000'))
+
+require 'puma'
+require 'puma/configuration'
+require 'puma/launcher'
+
+configuration = Puma::Configuration.new do |c|
+  c.app(app)
+  c.bind("tcp://#{host}:#{port}")
+  c.log_requests(false)
+end
+
+warn "Mathpix MCP (Streamable HTTP) listening on http://#{host}:#{port}"
+Puma::Launcher.new(configuration).run
