@@ -1,0 +1,33 @@
+PATH
+  remote: .
+  specs:
+    mathpix-mcp (0.1.0)
+      base64 (>= 0.1)
+      mcp (~> 0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    base64 (0.3.0)
+    dotenv (2.8.1)
+    json_rpc_handler (0.1.1)
+    mcp (0.1.0)
+      json_rpc_handler (~> 0.1)
+
+PLATFORMS
+  arm64-darwin-25
+  ruby
+
+DEPENDENCIES
+  dotenv (~> 2.8)
+  mathpix-mcp!
+
+CHECKSUMS
+  base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
+  dotenv (2.8.1) sha256=c5944793349ae03c432e1780a2ca929d60b88c7d14d52d630db0508c3a8a17d8
+  json_rpc_handler (0.1.1) sha256=ea248c8cb4d5490dde320db316ac5e3caf8137a20b5ff9035a4bfc1d19438d90
+  mathpix-mcp (0.1.0)
+  mcp (0.1.0) sha256=299ead288a6866ed6b0efc6d0e17dbc5951e92f28badef7600681e7c0462c189
+
+BUNDLED WITH
+  4.0.11

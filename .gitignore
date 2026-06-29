@@ -1,0 +1,17 @@
+# Secrets
+.env
+.env.*
+
+# Bundler
+/.bundle/
+/vendor/bundle/
+
+# Build artifacts
+*.gem
+/pkg/
+/coverage/
+/tmp/
+
+# Editor / OS
+.DS_Store
+*.swp
