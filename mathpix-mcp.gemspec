@@ -7,25 +7,29 @@ Gem::Specification.new do |s|
   s.version     = Mathpix::VERSION
   s.authors     = ['Georgios Douzas']
   s.email       = ['georgios.douzas@gmail.com']
-  s.summary     = 'Mathpix OCR MCP server (stdio)'
+  s.summary     = 'Mathpix OCR MCP server (stdio + HTTP)'
   s.description = <<~DESC
-    A Model Context Protocol (stdio) server for Mathpix OCR. Exposes tools to
-    convert images and PDF/DOCX/PPTX documents to LaTeX and Markdown, with
-    descriptive errors and optional file output for large results.
+    A Model Context Protocol server for Mathpix OCR, over stdio or Streamable
+    HTTP (bearer-token auth). Exposes tools to convert images and PDF/DOCX/PPTX
+    documents to LaTeX and Markdown, with descriptive errors and optional file
+    output for large results.
   DESC
   s.licenses = ['MIT']
 
   s.required_ruby_version = '>= 3.2.0'
 
-  s.files = Dir['lib/**/*.rb', 'bin/*', 'README.md', 'LICENSE', 'CHANGELOG.md']
+  s.files = Dir['lib/**/*.rb', 'bin/*', 'config.ru', 'README.md', 'LICENSE', 'CHANGELOG.md']
   s.bindir        = 'bin'
-  s.executables   = ['mathpix-mcp']
+  s.executables   = %w[mathpix-mcp mathpix-mcp-http]
   s.require_paths = ['lib']
 
-  # Runtime dependencies — minimal stdio MCP server.
   # base64 is no longer a default gem on Ruby 3.4+, so it must be declared.
   s.add_dependency 'base64', '>= 0.1'
   s.add_dependency 'mcp', '>= 0.9.2'
+  # HTTP (Streamable HTTP) transport. rack is autoloaded by the SDK transport;
+  # puma serves it via bin/mathpix-mcp-http. (stdio mode loads neither.)
+  s.add_dependency 'puma', '~> 6.0'
+  s.add_dependency 'rack', '~> 3.1'
 
   s.metadata['rubygems_mfa_required'] = 'true'
 end

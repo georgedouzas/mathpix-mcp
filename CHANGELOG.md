@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Streamable HTTP transport** (`bin/mathpix-mcp-http` / `config.ru`) using the
+  SDK's `StreamableHTTPTransport`, guarded by a required bearer token
+  (`MATHPIX_MCP_TOKEN`); binds to `127.0.0.1` by default.
+- Dev tooling: RuboCop (+ rake/rspec plugins), RSpec suite, Rakefile default
+  task, and GitHub Actions CI (rubocop + rspec + bundler-audit).
+
+### Changed
+- Upgraded `mcp` to a patched release (fixes CVE-2026-33946, SSE session
+  binding) and updated the stdio transport require/path accordingly.
+
 ## [0.1.0] - 2026-06-29
 
 Initial release: a stdio Model Context Protocol server for Mathpix OCR.

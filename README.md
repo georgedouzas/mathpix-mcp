@@ -1,8 +1,9 @@
 # mathpix-mcp
 
-A **Model Context Protocol (stdio) server** for [Mathpix](https://mathpix.com) OCR.
-It exposes Mathpix conversion as MCP tools so an LLM/agent can turn images and
-PDF/DOCX/PPTX documents into LaTeX and Markdown.
+A **Model Context Protocol server** for [Mathpix](https://mathpix.com) OCR, over
+**stdio** or **Streamable HTTP** (bearer-token auth). It exposes Mathpix
+conversion as MCP tools so an LLM/agent can turn images and PDF/DOCX/PPTX
+documents into LaTeX and Markdown.
 
 ## Tools
 
@@ -38,7 +39,7 @@ bundle install
 cp .env.example .env                 # add your MATHPIX_APP_ID / MATHPIX_APP_KEY
 ```
 
-## Run
+## Run (stdio)
 
 ```bash
 mathpix-mcp            # if installed as a gem
@@ -48,6 +49,33 @@ bundle exec mathpix-mcp
 
 It speaks MCP over stdio. Credentials are read from `.env` (when launched from
 the project directory) or the process environment.
+
+## Run (HTTP / Streamable HTTP)
+
+The HTTP transport requires a bearer token (`MATHPIX_MCP_TOKEN`) — every request
+must send `Authorization: Bearer <token>`. It binds to `127.0.0.1:3000` by
+default (`MATHPIX_MCP_HOST` / `MATHPIX_MCP_PORT`).
+
+```bash
+export MATHPIX_MCP_TOKEN=$(openssl rand -hex 32)
+mathpix-mcp-http                 # if installed as a gem
+# or
+bundle exec mathpix-mcp-http
+# or, with a Rack server of your choice:
+bundle exec puma config.ru -b tcp://127.0.0.1:3000
+```
+
+Example request:
+
+```bash
+curl -s http://127.0.0.1:3000/ \
+  -H "Authorization: Bearer $MATHPIX_MCP_TOKEN" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+```
+
+Don't expose it on a public interface without a TLS-terminating reverse proxy.
 
 ## Register as an MCP server (Claude Code)
 
