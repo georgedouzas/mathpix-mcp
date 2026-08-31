@@ -12,7 +12,7 @@ group :development, :test do
   gem 'bundler-audit', '~> 0.9', require: false
   gem 'rake', '~> 13.2'
   gem 'rspec', '~> 3.13'
-  gem 'rubocop', '~> 1.72', require: false
+  gem 'rubocop', '~> 1.90', require: false
   gem 'rubocop-rake', '~> 0.6', require: false
   gem 'rubocop-rspec', '~> 3.4', require: false
 end
